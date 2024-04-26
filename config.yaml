@@ -3,10 +3,12 @@ upstreamConfig:
     - id: backend
       path: ${BACKEND_PATH}
       uri: ${BACKEND_URI}
+      identityFile: ${BACKEND_IDENTITY}
       passHostHeader: false
     - id: frontend
       path: ${FRONTEND_PATH}
       uri: ${FRONTEND_URI}
+      identityFile: ${FRONTEND_IDENTITY}
       passHostHeader: false
 server:
   bindAddress: 0.0.0.0:${PORT}

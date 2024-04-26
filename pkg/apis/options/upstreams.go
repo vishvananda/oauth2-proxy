@@ -84,6 +84,10 @@ type Upstream struct {
 	// Defaults to true.
 	PassHostHeader *bool `json:"passHostHeader,omitempty"`
 
+	// IdentityFile will cause an Authorization header to be passed to the
+	// upstream with a bearer token loaded from the file
+	IdentityFile string `json:"identityFile,omitempty"`
+
 	// ProxyWebSockets enables proxying of websockets to upstream servers
 	// Defaults to true.
 	ProxyWebSockets *bool `json:"proxyWebSockets,omitempty"`

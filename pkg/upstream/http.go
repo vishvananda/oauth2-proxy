@@ -6,8 +6,11 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
+	"sync"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/mbland/hmacauth"
 	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/apis/middleware"
 	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/apis/options"
@@ -160,6 +163,10 @@ func newReverseProxy(target *url.URL, upstream options.Upstream, errorHandler Pr
 		setProxyUpstreamHostHeader(proxy, target)
 	}
 
+	if upstream.IdentityFile != "" {
+		setProxyIdentity(proxy, upstream.IdentityFile)
+	}
+
 	// Set the error handler so that upstream connection failures render the
 	// error page instead of sending a empty response
 	if errorHandler != nil {
@@ -172,6 +179,63 @@ func newReverseProxy(target *url.URL, upstream options.Upstream, errorHandler Pr
 	return proxy
 }
 
+// setProxyIdentity set dynamic identity from file
+func setProxyIdentity(proxy *httputil.ReverseProxy, identity string) {
+	var fileData *string
+	// Read data from file
+	data, err := os.ReadFile(identity)
+	if err != nil {
+		panic(err)
+	}
+
+	s := strings.TrimSpace(string(data))
+	fileData = &s
+
+	fileMutex := sync.RWMutex{}
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		panic(err)
+	}
+
+	// Start a goroutine to handle file events
+	go func() {
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					newData, err := os.ReadFile(event.Name)
+					if err == nil {
+						fileMutex.Lock()
+						s := strings.TrimSpace(string(newData))
+						fileData = &s
+						fileMutex.Unlock()
+					}
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				panic(err)
+			}
+		}
+	}()
+
+	// Add path to the watcher
+	if err := watcher.Add(identity); err != nil {
+		panic(err)
+	}
+
+	director := proxy.Director
+	proxy.Director = func(req *http.Request) {
+		director(req)
+		fileMutex.RLock()
+		defer fileMutex.RUnlock()
+		req.Header.Set("Authorization", "Bearer " + *fileData)
+	}
+}
 // setProxyUpstreamHostHeader sets the proxy.Director so that upstream requests
 // receive a host header matching the target URL.
 func setProxyUpstreamHostHeader(proxy *httputil.ReverseProxy, target *url.URL) {
