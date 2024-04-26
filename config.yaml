@@ -1,0 +1,25 @@
+upstreamConfig:
+  upstreams:
+    - id: backend
+      path: ${BACKEND_PATH}
+      uri: ${BACKEND_URI}
+      passHostHeader: false
+    - id: frontend
+      path: ${FRONTEND_PATH}
+      uri: ${FRONTEND_URI}
+      passHostHeader: false
+server:
+  bindAddress: 0.0.0.0:${PORT}
+providers:
+- provider: oidc
+  id: hk-id
+  code_challenge_method: S256
+  clientID: ${OAUTH2_PROXY_CLIENT_ID}
+  clientSecret: ${OAUTH2_PROXY_CLIENT_SECRET}
+  oidcConfig:
+    issuerURL: ${OAUTH2_PROXY_OIDC_ISSUER_URL}
+    insecureAllowUnverifiedEmail: true
+    audienceClaims:
+      - aud
+    emailClaim: email
+    userIDClaim: preferred_username
