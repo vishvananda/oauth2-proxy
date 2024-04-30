@@ -1,1 +1,1 @@
-web: bin/oauth2-proxy --email-domain '*' --alpha-config config.yaml --standard-logging --auth-logging --request-logging --issuer-url 'https://hk-id.my.salesforce.com' --skip-provider-button=true --session-store=redis --redis-connection-url "$REDIS_URL"
+web: bin/oauth2-proxy --email-domain '*' --alpha-config config.yaml --standard-logging --auth-logging --request-logging --skip-provider-button=true --session-store=redis --redis-connection-url "$REDIS_URL"
