@@ -1,1 +1,1 @@
-web: env OAUTH2_PROXY_SCOPE=openid bin/oauth2-proxy --email-domain '*' --alpha-config config.yaml --standard-logging --auth-logging --request-logging --skip-provider-button=true --skip-auth-route "GET=^/api/debug"
+web: bin/oauth2-proxy --email-domain '*' --alpha-config config.yaml --standard-logging --auth-logging --request-logging --skip-provider-button=true --session-store-type=redis --redis-connection-url "$REDIS_URL" --redis-insecure-skip-tls-verify
