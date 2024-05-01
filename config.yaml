@@ -18,6 +18,7 @@ providers:
   code_challenge_method: S256
   clientID: ${OAUTH2_PROXY_CLIENT_ID}
   clientSecret: ${OAUTH2_PROXY_CLIENT_SECRET}
+  scope: openid
   oidcConfig:
     issuerURL: https://hk-id.my.salesforce.com
     insecureAllowUnverifiedEmail: true
