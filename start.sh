@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-OAUTH2_PROXY_OIDC_ISSUER_URL="${OAUTH2_PROXY_OIDC_ISSUER_URL:=https://hk-id.my.salesforce.com}"
-REDIS_URL="${CACHE_URL:-$REDIS_URL}"
+export OAUTH2_PROXY_OIDC_ISSUER_URL="${OAUTH2_PROXY_OIDC_ISSUER_URL:=https://hk-id.my.salesforce.com}"
+export REDIS_URL="${CACHE_URL:-$REDIS_URL}"
 if [[ "$REDIS_URL" != "" ]]; then
     EXTRA="--session-store-type=redis --redis-connection-url $CACHE_URL --redis-insecure-skip-tls-verify"
 fi
