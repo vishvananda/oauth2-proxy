@@ -20,7 +20,7 @@ providers:
   clientSecret: ${OAUTH2_PROXY_CLIENT_SECRET}
   scope: openid
   oidcConfig:
-    issuerURL: https://hk-id.my.salesforce.com
+    issuerURL: ${OAUTH2_PROXY_OIDC_ISSUER_URL}
     insecureAllowUnverifiedEmail: true
     audienceClaims:
       - aud

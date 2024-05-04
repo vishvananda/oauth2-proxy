@@ -1,1 +1,1 @@
-web: bin/oauth2-proxy --email-domain '*' --alpha-config config.yaml --standard-logging --auth-logging --request-logging --skip-provider-button=true --session-store-type=redis --redis-connection-url "$CACHE_URL" --redis-insecure-skip-tls-verify
+web: ./start.sh
