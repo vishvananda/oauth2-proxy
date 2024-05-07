@@ -2,13 +2,13 @@ upstreamConfig:
   upstreams:
     - id: backend
       path: /api/
-      uri: ${CONN_BACKEND_URI}
-      identityFile: ${CONN_BACKEND_IDENTITY}
+      uri: ${TARGET_BACKEND_URI}
+      identityFile: ${TARGET_BACKEND_IDENTITY}
       passHostHeader: false
     - id: frontend
       path: /
-      uri: ${CONN_FRONTEND_URI}
-      identityFile: ${CONN_FRONTEND_IDENTITY}
+      uri: ${TARGET_FRONTEND_URI}
+      identityFile: ${TARGET_FRONTEND_IDENTITY}
       passHostHeader: false
 server:
   bindAddress: 0.0.0.0:${PORT}
