@@ -1,0 +1,32 @@
+repo: https://github.com/vishvananda/oauth2-proxy
+proc: web
+buildpacks:
+  - heroku/go
+config:
+  OAUTH2_PROXY_CLIENT_ID:
+    template: oauth2-client
+    description: oauth2 client id
+    required: true
+    secret: true
+  OAUTH2_PROXY_CLIENT_SECRET:
+    template: oauth2-secret
+    description: oauth2 client secret
+    required: true
+    secret: true
+  OAUTH2_PROXY_COOKIE_SECRET:
+    template: oauth2-cookie
+    default-gen: random
+    description: oauth2 cookie secret
+    secret: true
+  OAUTH2_PROXY_OIDC_ISSUER_URL:
+    template: oauth2-issuer
+    default: https://hk-id.my.salesforce.com
+    description: oauth2 issuer url
+children:
+  cache:
+    plan:
+      template: cache-plan
+      default: mini
+      description: plan for proxy cache
+    service: heroku-redis
+    type: addon
